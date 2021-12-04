@@ -21,3 +21,63 @@ nav .navbar-brand .green
 {
     color: #2e944b;
 }
+
+.type {
+    text-align: left;
+    color: red;
+}
+
+.flip {
+    text-align: right;
+    color: blue;
+}
+
+h1 {
+    color: navy;
+    font-style: italic;
+    font-family: "Lobster", cursive;;
+}
+
+body {
+    background-image: url("/static/field.jpg/");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 53%;
+    background-color: #c9cfd6;
+}
+
+p{
+    color: black;
+    font-weight: bold;
+    font-family: fantasy;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    padding-right: 20%;
+    padding-left: 20%;
+}
+
+footer{
+    color: #5f6d7a;
+    text-align: center;
+}
+
+ul {
+    text-align: center;
+    list-style-position: inside;
+    color: black;
+    font-weight: bold;
+    font-family: fantasy;
+    height: 30%;
+    padding-right: 20%;
+    padding-left: 20%;
+}
+
+a {
+    text-align: center;
+    list-style-position: inside;
+    color: black;
+    font-weight: bold;
+    font-family: fantasy;
+}
