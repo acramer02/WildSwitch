@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My cards
+{% endblock %}
+
+{% block main %}
+<!-- I don't know if the line below's syntax is legal -->
+<h1> {{ session["user_id"] }}'s Information</h1>
+<table class="table tablestriped">
+    <thead>
+        <tr>
+            <th class="text-start"># of Cards</th>
+            <th class="text-start"># of Pitchers</th>
+            <th class="text-start"># of Batters</th>
+            <th class="text-start">Cash Stores</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <!-- this would either require updating the users table (very doable, but maybe unnecessary
+            or somehow passing in extra info)-->
+            <td class="text-start">{{ users.cards }} </td>
+            <td class="text-start">{{ users.pitchers }} </td>
+            <td class="text-start">{{ users.batters }} </td>
+            <td class="text-start">{{ users.cash }} </td>
+
+<h1>My Cards</h1><br><br>
+<h2>Batters</h2>
+<div class="row">
+<!--for loop batters should loop thru these elements
+
+SELECT * FROM Batting
+WHERE playerID IN
+(SELECT playerID FROM Cards
+WHERE username = ?”, session{“user_id”]) -->
+    {% for batter in batters %}
+    <div class="card bg-light mb-3" style="max-width: 18rem; margin: 20px;">
+            <div class="card-header">{{ batter[16] }} - {{ batter[1] }}</div>
+            <div class="card-body">
+            <p class="card-title">Games: {{ batter[5] }} At Bats: {{ batter[6] }}</p>
+            <p class="card-text">Hits: {{ batter[8] }} Doubles: {{ batter[9] }}</p>
+            <p class="card-text">Triples: {{ batter[10] }} HR: {{ batter[11] }}</p>
+            <p class="card-text">Runs: {{ batter[7] }} RBIs: {{ batter[12] }}</p>
+            <p class="card-text"> {{ batter[17] }}</p>
+            </div>
+        </div>
+    <br><br>
+    {% endfor %}
+
+<h3>Pitchers</h3>
+<div class="row">
+<!--for loop pitchers should loop thru these elements
+
+SELECT * FROM Pitching
+WHERE playerID IN
+(SELECT playerID FROM Cards
+WHERE username = ?”, session{“user_id”]) -->
+    {% for pitcher in pitcher %}
+        <div class="card bg-light mb-3" style="max-width: 18rem; margin: 20px;">
+            <div class="card-header">{{ pitcher[22] }} - {{ pitcher[1] }}</div>
+            <div class="card-body">
+            <p class="card-title">Games: {{ pitcher[8] }} W-L: {{ pitcher[5] }}-{{ pitcher[6] }}</p>
+            <p class="card-text">ERA: {{ pitcher[17] }} Hits: {{ pitcher[12] }}</p>
+            <p class="card-text">Strikeouts: {{ pitcher[16] }} Walks: {{ pitcher[14] }}</p>
+            <p class="card-text">HR: {{ pitcher[13] }} Batters Faced: {{ pitcher[20] }}</p>
+            <p class="card-text"> {{ pitcher[23] }}</p>
+            </div>
+        </div>
+      <br> <br>
+    {% endfor %}
+</div>
