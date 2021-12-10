@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    User Cards
+{% endblock %}
+
+{% block main %}
+<!-- I don't know if the line below's syntax is legal -->
+<h1> {{ username }}'s Information</h1>
+<table class="table tablestriped">
+    <thead>
+        <tr>
+            <th class="text-start"># of Cards</th>
+            <th class="text-start">Cash Stores</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <!-- this would either require updating the users table (very doable, but maybe unnecessary
+            or somehow passing in extra info)-->
+            <td class="text-start">{{ cardCount }} </td>
+            <td class="text-start">{{ cash | usd }} </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<h2>Sell cards</h2>
+<h4>Type in player name and year to sell card back to market.</h4>
+<main class="container-fluid py-5 text-center">
+    <form action="/sell" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="playersell" name="playersell" placeholder="Player name" type="text">
+        </div>
+        <div class="mb-3">
+          <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="yearsell" name="yearsell" placeholder="Year" type="number">
+        </div>
+        <button class="btn btn-danger" type="submit">Sell</button>
+    </form>
+</main>
+<br>
+<h4>Type in player name, year, and price valuation to mark as available for sale.</h4>
+<br>
+<form action="/auction" method="post">
+  <div class="mb-3">
+      <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="playerauction" name="playersell" placeholder="Player name" type="text">
+  </div>
+  <div class="mb-3">
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="yearauction" name="yearauction" placeholder="Year" type="number">
+  </div>
+  <div class="mb-3">
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="value" name="value" placeholder="Value" type="number">
+  </div>
+  <button class="btn btn-danger" type="submit">Place for sale</button>
+</form>
+<br>
+<h2>Batters</h2>
+<div class="row">
+  {% for batter in batters %}
+  <div class="card bg-light mb-3" style="max-width: 18rem; margin: 20px;">
+      <div class="card-header" style="font-family: 'Optima', sans-serif;">{{ batter[0][2] }} - {{ batter[0][1] }}</div>
+      <div class="card-body row">
+        <div class="column">
+          <p class="card-text">Games: {{ batter[0][5] }}  </p>
+          <p class="card-text">Hits: {{ batter[0][8] }}  </p>
+          <p class="card-text">Triples: {{ batter[0][10] }}  </p>
+          <p class="card-text">Runs: {{ batter[0][7] }}  </p>
+        </div>
+        <div class="column">
+          <p class="card-text">At Bats: {{ batter[0][6] }}</p>
+          <p class="card-text">Doubles: {{ batter[0][9] }}</p>
+          <p class="card-text">HR: {{ batter[0][11] }}</p>
+          <p class="card-text">RBIs: {{ batter[0][12] }}</p>
+        </div>
+        <p class="card-text">{{ batter[0][16] }}</p>
+        <p class="card-text">{{ batter[0][17] | usd }}</p>
+      </div>
+  </div>
+  <br> <br>
+{% endfor %}
+<br>
+<h2>Pitchers</h2>
+<div class="row">
+  {% for pitcher in pitchers %}
+  <div class="card bg-light mb-3" style="max-width: 18rem; margin: 20px;">
+    <div class="card-header" style="font-family: 'Optima', sans-serif;">{{ pitcher[0][2] }} - {{ pitcher[0][1] }}</div>
+    <div class="card-body row">
+      <div class="column">
+        <p class="card-text">Games: {{ pitcher[0][7] }}  </p>
+        <p class="card-text">ERA: {{ pitcher[0][17] }}  </p>
+        <p class="card-text">SO: {{ pitcher[0][16] }}  </p>
+        <p class="card-text">HR: {{ pitcher[0][13] }}  </p>
+      </div>
+      <div class="column">
+        <p class="card-text">W-L: {{ pitcher[0][5] }}-{{ pitcher[0][6] }}</p>
+        <p class="card-text">Hits: {{ pitcher[0][12] }}</p>
+        <p class="card-text">Walks: {{ pitcher[0][14] }}</p>
+        <p class="card-text">HBP: {{ pitcher[0][19] }}</p>
+      </div>
+      <p class="card-text">{{ pitcher[0][22] }}</p>
+      <p class="card-text">{{ pitcher[0][23] | usd }}</p>
+    </div>
+  </div>
+  <br> <br>
+  {% endfor %}
+
+
+</div>
+{% endblock %}
