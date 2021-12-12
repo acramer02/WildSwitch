@@ -5,12 +5,15 @@ Our design can be split into a few parts. There is a SQL database, the app.py fi
 #
 # SQL database
 
-We used 9 tables, only 5 of which we continue to use to run the app. Those four are Batting, Pitching, Cards, Users, and Market.
+We used 11 tables within our data 7 of which we continue to use to run the app. Those four are Batting, Pitching, Cards, Users, Market, Search and SearchUser.
 Users stores every user's unique id, username, hashed password, and cash values.
 Cards stores the playerID, fullName, position (0 or 1 for batter or pitcher), status (0 or 1 for for sale or not for sale) and username of the owner). Note that not every player is in the cards file. Only the players whose cards' are currently owned.
-Batting and pitching store the names, playerIDs, years, teamID, and other relevant stat for every player in our database. 
-When we refer to SQL commands below, they are addressing these four tables.
+Batting and Pitching store the names, playerIDs, years, teamID, and other relevant stat for every player in our database. 
 Market is a table that gets deleted and re-created with each new log in. It stores the eight players who appear on the buy page.
+Search and SearchUser are used within the search function to store whatever information the user is looking up. We can then access those tables to get the data to display on the HTML pages.
+
+
+When we refer to SQL commands below, they are addressing these four tables.
 
 #
 #
@@ -19,13 +22,13 @@ Market is a table that gets deleted and re-created with each new log in. It stor
 Our fundamental principle throughout the implementation of this file was to deal with any POST method submissions first by checking for all possible errors, then updating all relevant SQL tables, then redirecting the user to wherever we want to take them. After that, we then have the relatively easier code which deals with the GET method, in which we merely have to display information. We will explain how this manifests itself in each section, but that pattern will hold true for every function we call. A lot of our coding included SQL querying, using if statements to address different options and deal with possible errors, and storing and passing the correct information either to HTML pages or using it in SQL queries.
 
 # Set up
-The first 41 lines of our code are devoted to loading and importing all of the tools we need to run our app.
+The first 44 lines of our code are devoted to loading and importing all of the tools we need to run our app.
 
 # register
 If the method is POST, we run three quick checks to make sure that the user has entered a username, password, and confirmation. We then check via a count query in SQL if that username is already taken, then we check that the password and confirmation match. We get all of this work using the syntax request.form.get, a syntax we use throughout the code. I will just explicitly explain here that it is the simplest way for us to get user input from a form. Once we have ensured that none of those errors are present, we hash the password, then store the username and hashed password in our SQL table Users, and then we log the user in, build a market, and return them to the homepage. If it is just a GET method, we simply show the user the register.html page.
 
 # login
-We first clear the session to make sure no user is logged in. Then, if it's a POST method, we ensure that the user inputs both a username and password into the form. We then query our Users table to make sure first that the username exists and then that the password is correct. If that is all true, we then set the session's user_id equal to that user's id, build their random market, and take them to the homepage. If the user is at the page via a GET method, we simply show them the login.html page.
+We first clear the session to make sure no user is logged in. Then, if it's a POST method, we ensure that the user inputs both a username and password into the form. We then query our Users table to make sure first that the username exists and then that the password is correct. If that is all true, we then set the session's user_id equal to that user's id, use a SQL command to add 5 to cash, build their random market, and take them to the homepage. If the user is at the page via a GET method, we simply show them the login.html page.
 
 # log out
 Clears session, returns the user to the login.html page
@@ -40,7 +43,19 @@ We create two empty lists for batters and pitchers. We then append every batter 
 
 
 # search
-When the user inputted anything via POST, we first made sure to get their input via request.form.get. The two things that a user could input were a user/player name and the criteria (batter, pitcher, or user) from the dropdown menu. We used if statements for each criteron. Within each, we checked if their inputted name was within the corresponding database.  If their search was valid, we took the corresponding information, put it into a list, and passed it through to the correct html page. If not, we returned an error. If the user got to search via a GET method, we simply displayed the text field and the dropdown menu.
+When the user inputted anything via POST, we first made sure to get their input via request.form.get. The two things that a user could input were a user/player name and the criteria (batter, pitcher, or user) from the dropdown menu. We used if statements for each criteron. Within each, we checked if their inputted name was within the corresponding database.  If their search was valid, we took the corresponding information, put it into a list, and passed it through to either the search_user or search_player function, which then will deal with buying from search more specifically with the correct case. It also redirects to the GET method for either search_user or search_player, so it will display all of the cards for the player. If their search was invalid, we returned an error. If the user got to search via a GET method, we simply displayed the text field and the dropdown menu.
+
+# search_user
+When the user inputted anything via POST, we first made sure to get their input via request.form.get. The two things that a user could input were a player name and year. We made sure that both of these fields were filled out with if statements. If they were filled out, we stored the input and got all of the data that was stored in the SearchUser table. Then we compared the input to the table. If they did not match any player in the table, we return an error. If they did match, we checked to see if the player was for sale by using a SQL query to get the card’s status. If it was for sale, we used a SQL query to determine the auction price of the card. If the user's cash was less than the auction price, they could afford the card. If they could afford it, we then updated the Cards table to set a new user who owned it and to indicate it wasn't for sale. We then updated the user's cash to subtract the cost, then changed the value in the Batting or Pitching table to indicate that it wasn't for sale, and then updated the previous owner's cash to indicate the changes. We did all of that with SQL. And after all of these changes, we show the users the mycards.html page.
+
+If the user reached via GET (i.e. redirected via Search) we use the same concepts we use in mycarrds to display the information. We create empty lists for batters and pitchers. We then queried the pitchers and batters databases to get all of the user's cards, appended that information to our lists, and then passed that information through to the usersearch.html page.
+
+# search_player
+When the user inputted anything via POST, we first got all the info that we just added to the Search table about these cards. We then made sure the user inputted wa year.  If they were filled out, we stored the input. Then we compared the input to the data from the table. We then get the player's position and check from the corresponding table to count the number of players with that year. If there are no matches, we return an error. We then check if the card is owned with a SQL query. If it is, we return an error. Otherwise, we get the user's cash and the value of the card with SQL queries to make sure they can afford the card. We then do a few SQL queries to update the user's cash stores and change the card's status. After all of that, we redirect the user to their mycards.html page.
+
+' If they could afford it, we then updated the Cards table to set a new user who owned it and to indicate it wasn't for sale. We then updated the user's cash to subtract the cost, then changed the value in the Batting or Pitching table to indicate that it wasn't for sale, and then updated the previous owner's cash to indicate the changes. We did all of that with SQL. And after all of these changes, we show the users the mycards.html page.
+
+If the user reached via GET (i.e. redirected via Search) we use the same concepts we use in mycarrds to display the information. We create empty lists for batters and pitchers. We then queried the pitchers and batters databases to get all of the user's cards, appended that information to our lists, and then passed that information through to the usersearch.html page.
 
 # buy
 We implement our buy function to work as follows. When the user submits some input to site via a POST method, we execute a SQL query to get the user's cash value and another one to get the the player's information that was selected in the dropdown menu by the user. We then wanted to first check that the card isn't already owned. If it is, we return an error. Then we check if the user can afford the card. If not, we return an error. But then, if the user can afford it and the card is available, we execute three SQL commands which adds the information into the cards table with the right data, updates the user's cash and makes sure the card is unavailable. WE also make sure the card's status within the batting or pitching table is then changed to own. After all of this, we take the user back to their colleciton page. If they are just coming to the buy page but haven't submitted anything, we deal with the GET method. In there, we create empty lists for batters and pitchers and make a list of the eight players listed in the market table. From there, we then fill out the lists of batters and players by checking their positions, and appending their information to the lists. After all of that, we pass the batters and pitchers' information through to the buy.html page.
@@ -105,3 +120,5 @@ On various pages, we had to utilize Jinja for-loops. This was essential because 
 #
 # CSS
 We used Bootstrap pretty heavily, especially for the cards, and then made our own stylistic decisions on our own stylesheet mostly based on trial and error.
+
+
