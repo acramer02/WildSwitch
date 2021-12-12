@@ -9,7 +9,7 @@ The basic functions of our website are laid out on the homepage. However, we wil
 
 # REGISTER
 Function - The register page allows users to create an account by entering a username and password. 
-Usage - When you go to the site, it will direct you to a login page. In the top right corner, there are two buttons, log in and register. Upon clicking the register button, you will be redirected to a register page. It will ask you to enter a username, a password, and a password confirmation. You will get an error meesage if any of the following are true: you leave a text box blank, your username is taken, or your passwords do not match. Otherwise, you will be allowed to register, meaning the app will store your username and password to allow for future login. You will then be redirected to the homepage
+Usage - When you go to the site, it will direct you to a login page. In the top right corner, there are two buttons, log in and register. Upon clicking the register button, you will be redirected to a register page. It will ask you to enter a username, a password, and a password confirmation. You will get an error meesage if any of the following are true: you leave a text box blank, your username is taken, or your passwords do not match. Otherwise, you will be allowed to register, meaning the app will store your username and password to allow for future login. You will then be redirected to the homepage.
 Testing - 
 don't enter username --> Sorry. Please enter username.
 don't enter password --> Sorry. Please enter password.
@@ -20,12 +20,12 @@ enter unique username and matching passwords --> [redirected to homepage]
 
 # LOG IN
 Function - The log in page allows registered users to log in when they come to the site
-Usage - Allows you to log in to your account to use the site. Users must enter correct username and password and submit to log in. You will get an error if either of the following are true: you leave a text box blank or the username and password haven't been registered.
+Usage - Allows you to log in to your account to use the site. Users must enter correct username and password and submit to log in. You will get an error if either of the following are true: you leave a text box blank or the username and password haven't been registered. We also increase your cash by five every time you log-in to incentivize repeated usage of the site, and allows users to continue improving. 
 Testing - 
 don't enter username --> Sorry. Must provide username.
 don't enter password --> Sorry. Must provide password.
 incorrect username and/or password--> Sorry. Invalid username and/or password
-correct username and password--> [redirected to homepage]
+correct username and password--> [redirected to homepage, and cash will be five greater than before]
 
 
 note: all the following functions require log-in
