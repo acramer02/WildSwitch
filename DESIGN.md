@@ -53,7 +53,7 @@ If the user reached via GET (i.e. redirected via Search) we use the same concept
 # search_player
 When the user inputted anything via POST, we first got all the info that we just added to the Search table about these cards. We then made sure the user inputted wa year.  If they were filled out, we stored the input. Then we compared the input to the data from the table. We then get the player's position and check from the corresponding table to count the number of players with that year. If there are no matches, we return an error. We then check if the card is owned with a SQL query. If it is, we return an error. Otherwise, we get the user's cash and the value of the card with SQL queries to make sure they can afford the card. We then do a few SQL queries to update the user's cash stores and change the card's status. After all of that, we redirect the user to their mycards.html page.
 
-' If they could afford it, we then updated the Cards table to set a new user who owned it and to indicate it wasn't for sale. We then updated the user's cash to subtract the cost, then changed the value in the Batting or Pitching table to indicate that it wasn't for sale, and then updated the previous owner's cash to indicate the changes. We did all of that with SQL. And after all of these changes, we show the users the mycards.html page.
+If they could afford it, we then updated the Cards table to set a new user who owned it and to indicate it wasn't for sale. We then updated the user's cash to subtract the cost, then changed the value in the Batting or Pitching table to indicate that it wasn't for sale, and then updated the previous owner's cash to indicate the changes. We did all of that with SQL. And after all of these changes, we show the users the mycards.html page.
 
 If the user reached via GET (i.e. redirected via Search) we use the same concepts we use in mycarrds to display the information. We create empty lists for batters and pitchers. We then queried the pitchers and batters databases to get all of the user's cards, appended that information to our lists, and then passed that information through to the usersearch.html page.
 
@@ -80,9 +80,6 @@ honestly, we just took it from Finance, but the way it works is that it checks i
 
 # apology
 prints an inputted error message on apology.html
-
-# generate_user
-takes a username as input, and returns the equivalent of the mycards page for that user, albeit without their cash stores value. This was easier than coding it in the way we did for mycards because we had to be able to make some modifications to allow users to buy cards off of that page. We implemented this by using SQL queries to get the info for the players and creating two empty lists for batters and pitchers. We then for-looped through all of the players we got through our SQL query, appending them to pitchers and batters accordingly, and then passing that info through to usersearch.html.
 
 # usd
 Again, something we took from Finance. But the way it works is it takes a number, converts it to a two-decimal float, and then adds the dollar sign in front. This was important for us to keep because we wanted to work with numeric values for money, but display it in dollar format.
